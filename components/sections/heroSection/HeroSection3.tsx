@@ -116,10 +116,36 @@ const HeroMobile = () => {
               </div>
             </div>
           </motion.div>
+          
         );
       })}
     </div>
+      <motion.div
+  className="w-full max-w-[420px] mx-auto mt-6 px-2"
+  initial={{ y: 40, opacity: 0 }}
+  animate={{ y: 0, opacity: 1 }}
+  transition={{ delay: 0.4, duration: 0.5, ease: 'easeOut' }}
+>
+  <div className="relative group">
+    <div className="absolute inset-0 bg-blue-600/5 blur-2xl rounded-full group-hover:bg-blue-600/8 transition-all" />
 
+    <div className="relative flex items-center bg-white/90 backdrop-blur-md border border-slate-200 rounded-2xl p-1.5 shadow-md">
+      <div className="pl-3 text-slate-400">
+        <Search size={16} />
+      </div>
+
+      <input
+        type="text"
+        placeholder="Cerca tra 50+ polizze..."
+        className="flex-1 bg-transparent border-none outline-none text-slate-900 placeholder:text-slate-400 px-3 py-2 text-xs font-medium"
+      />
+
+      <button className="bg-slate-900 text-white px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-blue-600 transition-colors duration-200">
+        Cerca
+      </button>
+    </div>
+  </div>
+</motion.div>
     {/* INDICATOR */}
     <div className="flex justify-center gap-2 mt-2">
       {cards.map((_, i) => (
