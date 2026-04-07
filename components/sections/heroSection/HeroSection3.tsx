@@ -47,7 +47,7 @@ const HeroMobile = () => {
     };
 
     return (
-  <div className="h-[88vh] flex flex-col justify-between px-5 pt-20 pb-12 bg-white">
+  <div className="z-0 relative h-[88vh] flex flex-col justify-between px-5 pt-20 pb-12 bg-white">
 
     {/* TEXT */}
     <div className="text-center">
