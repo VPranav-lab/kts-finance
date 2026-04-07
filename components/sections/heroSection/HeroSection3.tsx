@@ -5,6 +5,140 @@ import { motion, useScroll, useTransform, useSpring, MotionValue } from 'framer-
 import { Shield, Heart, Briefcase, ShieldCheck, ArrowRight, Search, Expand } from 'lucide-react';
 import { SERVICES } from '@/lib/heroUtils';
 
+const HeroMobile = () => {
+    const [active, setActive] = useState(0);
+    const [paused, setPaused] = useState(false);
+
+    const cards = [
+        {
+            title: "Protezione Totale",
+            subtitle: "Polizza Master",
+            icon: ShieldCheck,
+            color: "bg-white text-slate-900 border",
+        },
+        {
+            title: "Enterprise Shield",
+            subtitle: "Business",
+            icon: Briefcase,
+            color: "bg-slate-900 text-white",
+        },
+        {
+            title: "Vita Illimitata",
+            subtitle: "Personale",
+            icon: Heart,
+            color: "bg-blue-600 text-white",
+        },
+    ];
+
+    useEffect(() => {
+        if (paused) return;
+
+        const interval = setInterval(() => {
+            setActive((prev) => (prev + 1) % cards.length);
+        }, 4000);
+
+        return () => clearInterval(interval);
+    }, [paused]);
+
+    const handleSelect = (i: number) => {
+        setActive(i);
+        setPaused(true);
+        setTimeout(() => setPaused(false), 6000);
+    };
+
+    return (
+  <div className="h-[88vh] flex flex-col justify-between px-5 pt-20 pb-12 bg-white">
+
+    {/* TEXT */}
+    <div className="text-center">
+      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-widest mb-4">
+        Protezione di nuova generazione
+      </div>
+
+      <h1 className="text-[clamp(2.4rem,8vw,3.6rem)] font-black leading-[0.95] text-slate-900">
+        Assicurazione
+        <br />
+        <span className="text-blue-600 italic">Ridefinita.</span>
+      </h1>
+
+      <p className="text-sm text-slate-500 mt-3 max-w-xs mx-auto">
+        Oltre 50 polizze, gestione digitale e zero burocrazia.
+      </p>
+    </div>
+
+    {/* STACKED CARDS */}
+    <div className="relative h-[280px] flex items-center justify-center">
+      {cards.map((card, i) => {
+        const position = (i - active + cards.length) % cards.length;
+        if (position > 2) return null;
+
+        const Icon = card.icon;
+
+        return (
+          <motion.div
+            key={i}
+            onClick={() => handleSelect(i)}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{
+              scale: position === 0 ? 1 : 0.86,
+              y: position * 18,
+              opacity: position === 0 ? 1 : 0.45,
+              zIndex: 10 - position,
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 140,
+              damping: 20,
+            }}
+            style={{
+              boxShadow:
+                position === 0
+                  ? "0 45px 120px rgba(0,0,0,0.35)"
+                  : "0 12px 30px rgba(0,0,0,0.15)",
+            }}
+            className={`
+              absolute w-[300px] h-[240px] rounded-3xl p-5
+              flex flex-col justify-between
+              ${card.color}
+              backdrop-blur-xl
+            `}
+          >
+            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+              <Icon size={18} />
+            </div>
+
+            <div>
+              <div className="text-[10px] uppercase opacity-60">
+                {card.subtitle}
+              </div>
+              <div className="text-lg font-bold">
+                {card.title}
+              </div>
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
+
+    {/* INDICATOR */}
+    <div className="flex justify-center gap-2 mt-2">
+      {cards.map((_, i) => (
+        <motion.button
+          key={i}
+          onClick={() => handleSelect(i)}
+          whileTap={{ scale: 0.8 }}
+          className={`h-1.5 rounded-full transition-all duration-300 ${
+            i === active
+              ? "w-6 bg-blue-600"
+              : "w-2 bg-slate-300"
+          }`}
+        />
+      ))}
+    </div>
+  </div>
+);
+};
+
 // ─── ServiceIcon Component ──────────────────────────────────────────────────
 interface ServiceIconProps {
     icon: React.ElementType;
@@ -60,7 +194,7 @@ const ServiceIcon = ({ icon: Icon, x, y, delay, scale, counterRotate }: ServiceI
 const Hero = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
-
+    
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth < 768);
         check();
@@ -68,10 +202,14 @@ const Hero = () => {
         return () => window.removeEventListener('resize', check);
     }, []);
 
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ['start start', 'end end'],
-    });
+    const { scrollYProgress } = useScroll(
+    isMobile === false
+        ? {
+            target: containerRef,
+            offset: ['start start', 'end end'],
+        }
+        : {}
+    );
 
     const smoothProgress = useSpring(scrollYProgress, {
         stiffness: 100,
@@ -94,9 +232,10 @@ const Hero = () => {
         window.addEventListener('mousemove', handleMouse);
         return () => window.removeEventListener('mousemove', handleMouse);
     }, [mouseX, mouseY]);
-
+    
     // ── Transforms (Aggressive speed for immediate feedback) ───────────────
     const titleScale = useTransform(smoothProgress, [0, 0.15], [1, 0.8]);
+
     const titleOpacity = useTransform(smoothProgress, [0, 0.15], [1, 0]);
     const titleY = useTransform(smoothProgress, [0, 0.15], [0, -60]);
 
@@ -114,11 +253,16 @@ const Hero = () => {
     const counterRotate = useTransform(cloudRotate, (v: number) => -v);
 
     const mobile = isMobile === true;
+    
     const iconCount = mobile ? 8 : Math.min(SERVICES.length, 14);
     const iconRadius = mobile ? 130 : 375;
+    if (isMobile === null) return null;
 
+    if (isMobile) {
+    return <HeroMobile key="mobile"/>;
+    }
     return (
-        <div ref={containerRef} className={`${mobile ? "h-[110vh]" : "h-[140vh]"} relative bg-white`}>
+        <div key="desktop" ref={containerRef} className={`${mobile ? "h-[110vh]" : "h-[140vh]"} relative bg-white`}>
             <div className={`sticky top-0 ${mobile ? "h-screen" : "h-full"} w-full flex items-center justify-center overflow-hidden`}>
 
                 {/* ── Background decoration ─────────────────────────────────── */}
