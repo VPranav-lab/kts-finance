@@ -1,15 +1,27 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState,useRef } from 'react'
 import { IconChevronDown, IconBrandFacebook, IconBrandInstagram, IconBrandLinkedin, IconBrandX, IconWorld } from '@tabler/icons-react'
 import { footerMenus, footerTypes } from '@/lib/footerUtils'
 import FooterAccordion from './Footer-accordion';
+import { motion, useScroll, useTransform } from "framer-motion";
 
 function Footer() {
     const [footerSections] = useState(() => (Object.keys(footerMenus) as footerTypes[]).map((e: footerTypes) => footerMenus[e]))
+     const footerRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: footerRef,
+        offset: ["start end", "end start"],
+        });
+    const y = useTransform(scrollYProgress, [0, 1], [80, -80]);
+    const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 1, 0.6]);
+    const scale = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
 
     return (
-        <footer className="bg-[#111111] text-white pt-16 pb-12 px-4 md:px-8 font-medium">
+        
+        <footer ref={footerRef} className="bg-[#111111] text-white pt-16 pb-12 px-4 md:px-8 font-medium">
+            
             <div className="max-w-7xl mx-auto flex flex-col">
+                
 
                 {/* Desktop Grid Links */}
                 <div className="hidden md:grid grid-cols-3 gap-3 mb-20">
@@ -42,8 +54,12 @@ function Footer() {
 
                 {/* Sub Footer Row 1: Logo & Socials */}
                 <div className="flex  md:flex-row justify-between items-center md:items-center gap-8 py-8 border-b border-white/10">
-                    <span className="text-3xl font-black tracking-tighter text-white">KTS Finance</span>
-                    <div className="flex gap-6 items-center">
+                    <img
+                        src="/logo.png" // change path if needed
+                        alt="KTS Finance"
+                        className="h-12 md:h-16 w-auto"
+                    />
+                    <div className="flex gap-6 items-center ml-auto mr-15">
                         <a href="#" className="text-white/60 hover:text-white transition-colors"><IconBrandFacebook size={24} /></a>
                         <a href="#" className="text-white/60 hover:text-white transition-colors"><IconBrandInstagram size={24} /></a>
                         <a href="#" className="text-white/60 hover:text-white transition-colors"><IconBrandX size={24} /></a>
@@ -83,6 +99,30 @@ function Footer() {
                         Iscrizione al Registro Unico degli Intermediari Assicurativi e Riassicurativi n. B000675941 L’Istituto competente alla vigilanza sull’attività di distribuzione svolta è IVASS. Gli estremi identificativi e di iscrizione dell’intermediario possono essere verificati consultando il RUI (https://ruipubblico.ivass.it), sul sito internet dell’IVASS (www.ivass.it).
                     </div>
                 </div>
+                <motion.div
+                    style={{ y, opacity, scale }}
+                    className="md:hidden flex flex-col items-center text-center mt-12 mb-6"
+                    >
+                    <h1 className="text-[clamp(3rem,10vw,5rem)] font-black tracking-tight leading-[0.9] text-white">
+                        KTS Finance
+                    </h1>
+
+                    <p className="mt-3 text-sm text-white/60">
+                        Assicurazione. <span className="text-blue-500 italic">Ridefinita.</span>
+                    </p>
+                </motion.div>
+                <motion.div
+                    style={{ y, opacity, scale }}
+                    className="hidden md:flex flex-col items-center text-center mt-12 mb-6"
+                    >
+                    <h1 className="text-[clamp(4rem,12vw,9rem)] font-black tracking-tight leading-none text-white/90">
+                        KTS Finance
+                    </h1>
+
+                    <p className="mt-4 text-2xl text-white/60">
+                        Assicurazione. <span className="text-blue-500 italic">Ridefinita.</span>
+                    </p>
+                </motion.div>
             </div>
         </footer>
     )

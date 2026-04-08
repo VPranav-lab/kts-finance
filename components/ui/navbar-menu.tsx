@@ -61,6 +61,7 @@ export const MenuItem = ({
   );
 };
 
+
 export const Menu = ({
   setActive,
   children,
@@ -72,37 +73,46 @@ export const Menu = ({
   isMobileOpen: boolean;
   setIsMobileOpen: (open: boolean) => void;
 }) => {
-
   return (
     <nav
       onMouseLeave={() => setActive(null)}
-      className="relative rounded-4xl border bg-primary-white border-white/20 bg-white/60 backdrop-blur-lg shadow-lg flex items-center justify-between border-none px-6 py-3 w-full max-w-5xl mx-auto"
+      className="relative rounded-4xl bg-white/60 backdrop-blur-lg shadow-lg flex items-center justify-between px-4 py-2.5 w-full max-w-5xl mx-auto"
     >
-      <Link href="/">
-        <Image src="https://www.ktsfinance.com/wp-content/uploads/2023/09/favicon.png" alt="Logo" width={50} height={50} loading="eager" />
-      </Link>
 
-      {isMobileOpen && <h3 className="text-primary-black font-semibold hover:text-secondary md:hidden">Assicurazioni</h3>}
+      {/* LEFT: Logo + Menu */}
+      <div className="flex items-center gap-15">
+        <Link href="/">
+          <Image
+            src="https://www.ktsfinance.com/wp-content/uploads/2023/09/favicon.png"
+            alt="Logo"
+            width={45}
+            height={45}
+          />
+        </Link>
 
-      {/* Desktop Menu Items */}
-      <div className="hidden md:flex items-center gap-8">
-        {children}
+        <div className="hidden md:flex items-center gap-6">
+          {children}
+        </div>
       </div>
 
-      {/* Desktop Buttons */}
-      <div className="hidden md:flex items-center gap-4">
-        <button className="px-4 py-3 rounded-full text-primary-black font-semibold transition-colors flex items-center gap-2 cursor-pointer">
-          LOGIN
+      {/* RIGHT: CTA */}
+      <div className="hidden md:flex items-center gap-3">
+        <button className="text-sm text-black/70 hover:text-black transition">
+          Accedi
         </button>
-        <button className="px-4 py-3 rounded-full border border-primary-black/20 font-semibold bg-secondary text-primary-white backdrop-blur-md transition-colors flex items-center gap-2 cursor-pointer">
-          <IconDeviceMobile size={18} /> SCARICA L'APP
+
+        <button className="bg-black text-white px-4 py-2 rounded-full text-sm">
+          Registrati
         </button>
       </div>
 
-      {/* Mobile Hamburger Icon */}
+      {/* MOBILE */}
       <div className="md:hidden flex items-center">
-        <button onClick={() => setIsMobileOpen(!isMobileOpen)} className="text-primary-black p-2">
-          {isMobileOpen ? <IconX size={28} /> : <IconMenu2 size={28} />}
+        <button
+          onClick={() => setIsMobileOpen(!isMobileOpen)}
+          className="text-primary-black p-2"
+        >
+          {isMobileOpen ? <IconX size={26} /> : <IconMenu2 size={26} />}
         </button>
       </div>
     </nav>
