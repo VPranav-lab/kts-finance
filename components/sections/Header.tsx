@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HoveredLink, Menu, MenuItem } from "../ui/navbar-menu";
 import { AnimatePresence, motion } from "framer-motion";
 import { subMenus, TabsType } from "@/lib/headerUtils";
@@ -10,7 +10,17 @@ export default function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabsType>("Per Te");
   const [openCategory, setOpenCategory] = useState<string | null>(null);
+    useEffect(() => {
+  if (isMobileOpen) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "auto";
+  }
 
+  return () => {
+    document.body.style.overflow = "auto";
+  };
+}, [isMobileOpen]);
   return (
     <div className="fixed top-4 inset-x-0 w-full max-w-4xl mx-auto px-4 z-50">
 
@@ -141,8 +151,8 @@ export default function Navbar() {
             <div className="flex gap-2 mb-17">
             <button className="w-full p-2 rounded-full border text-sm">
                 Accedi
-            </button>
-
+            </button> 
+              <br/>
             <button className="w-full p-2 rounded-full bg-black text-white text-sm">
                 Registrati
             </button>
