@@ -4,7 +4,21 @@ import { useState, useEffect } from "react";
 import { HoveredLink, Menu, MenuItem } from "../ui/navbar-menu";
 import { AnimatePresence, motion } from "framer-motion";
 import { subMenus, TabsType } from "@/lib/headerUtils";
+const getStoreLink = () => {
+  if (typeof window === "undefined") return "/download";
 
+  const userAgent = navigator.userAgent || navigator.vendor;
+
+  if (/android/i.test(userAgent)) {
+    return "https://play.google.com/store/apps/details?id=app.ktsfinance.com";
+  }
+
+  if (/iPad|iPhone|iPod/.test(userAgent)) {
+    return "https://apps.apple.com/it/app/kts-finance/id6741469577";
+  }
+
+  return "https://play.google.com/store/apps/details?id=app.ktsfinance.com";
+};
 export default function Navbar() {
   const [active, setActive] = useState<string | null>(null);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -155,6 +169,12 @@ export default function Navbar() {
               <br/>
             <button className="w-full p-2 rounded-full bg-black text-white text-sm">
                 Registrati
+            </button>
+            <button
+                onClick={() => window.open(getStoreLink(), "_blank")}
+                className="w-full p-3 rounded-full border text-sm font-semibold active:scale-95 transition"
+            >
+                Scarica l'app
             </button>
             </div>
 
