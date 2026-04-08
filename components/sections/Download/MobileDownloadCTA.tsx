@@ -23,7 +23,7 @@ export default function MobileDownloadCTA() {
     <motion.div
       initial={{ y: 80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
+      className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50"
     >
       <button onClick={() => window.open(getStoreLink(), "_blank")} className="bg-black text-white px-6 py-3 rounded-full shadow-xl font-semibold text-sm flex items-center gap-2 active:scale-95 transition">
         
