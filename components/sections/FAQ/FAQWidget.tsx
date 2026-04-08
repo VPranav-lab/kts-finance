@@ -50,7 +50,7 @@ export default function FAQWidget() {
           onClick={() => setOpen(true)}
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="fixed bottom-4 right-6 z-50 w-12 h-12 rounded-full bg-black text-white shadow-lg flex items-center justify-center hover:scale-110 transition"
+          className="fixed bottom-4 right-6 z-49 w-12 h-12 rounded-full bg-black text-white shadow-lg flex items-center justify-center hover:scale-110 transition"
         >
           <MessageCircle size={18} />
         </motion.button>

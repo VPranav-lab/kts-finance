@@ -162,7 +162,7 @@ export default function Navbar() {
 
             {/* MOBILE CTA */}
             {/* AUTH CTA (TOP) */}
-            <div className="flex gap-2 mb-17">
+            <div className="flex gap-2 mb-25">
             <button className="w-full p-2 rounded-full border text-sm">
                 Accedi
             </button> 
